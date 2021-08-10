@@ -1,7 +1,12 @@
 from user import User
+from database import connection_pool
 
-my_user = User(email="seyedalian@outlook.com",first_name="Ali",last_name="Seyedalian",id = 1)
 
-new_user = User.load_from_db_by_email("seyedalian@outlook.com")
+my_user = User(email="heidari@yahoo.com",first_name="Ali",last_name="Heidari")
 
-print(new_user)
+my_user.save_to_db()
+
+user = User.get_user_from_db_by_email("kaviani@yahoo.com")
+
+print(user)
+
