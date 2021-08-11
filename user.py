@@ -1,4 +1,4 @@
-from database import ConnectionFromPool
+from database import CursorFromConnectionFromPool
 class User:
     def __init__(self,email,first_name,last_name):
         self.email = email
@@ -9,16 +9,14 @@ class User:
         return "<User {}>".format(self.email)
     
     def save_to_db(self):
-        with ConnectionFromPool() as connection: 
-            with connection.cursor() as cursor:
-                cursor.execute('INSERT INTO users (email,first_name,last_name) VALUES (%s,%s,%s)',
-                                 (self.email,self.first_name,self.last_name))
+        with CursorFromConnectionFromPool() as cursor:
+            cursor.execute('INSERT INTO users (email,first_name,last_name) VALUES (%s,%s,%s)',
+                                (self.email,self.first_name,self.last_name))
 
     @classmethod
     def get_user_from_db_by_email(cls,email):
-        with ConnectionFromPool() as connection: 
-            with connection.cursor() as cursor:
-                cursor.execute('SELECT * FROM users WHERE email = %s',(email,))
-                user_data = cursor.fetchone()
+        with CursorFromConnectionFromPool() as cursor:
+            cursor.execute('SELECT * FROM users WHERE email = %s',(email,))
+            user_data = cursor.fetchone()
         return cls(email=user_data[1], first_name=user_data[2], last_name=user_data[3])
         
